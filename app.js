@@ -1,25 +1,43 @@
-//--------for Airline Reservation System  WebApi-------//
-const express = require ('express');
+// //--------for Airline Reservation System  WebApi-------//
+
+const express = require('express');
 const mongoose = require('mongoose');
-
-const PassengerRouter = require("./routes/passengers");
-
-const url = 'mongodb://localhost:27017/Airline';
-const PORT = 4000;
-
 const app = express();
+
+const dotenv = require('dotenv').config();
+const cors = require('cors');
+const morgan = require('morgan');
+
+mongoose.connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
+    .then((db) => {
+        console.log("Successfully connected mongodb server");
+    });
+
 app.use(express.static(__dirname + "/public"));
-mongoose.connect(url,{useNewUrlParser:true, useUnifiedTopology:true,use, useFindAndModify:false, useCreateIndex:true})
-.then((db) =>{
-    console.log("Connected to mongodb");
+const UserRouter = require('./routes/users');
+app.options('*', cors());
+app.use(cors());
+app.use(morgan('tiny'));
+app.use(express.json());
 
-}, (err) =>console.log(err));
+app.use('/users', UserRouter);
 
-app.use('/airline/passenger', userRouter);
+//app.use('/users', userRouter);
+// app.use('/upload', auth.verifyUser, uploadRouter);
+// app.use('/categories', auth.verifyUser, categoryRouter);
+// app.use('/tasks', auth.verifyUser, taskRouter);
 
-app.listen(PORT, ()=>{
-    console.log(`App is running at localhost:${PORT}`);
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+     res.status(500).send({ status: err.message });
+    res.statusCode = 500;   
+    res.json({ status: err.message });
+})
+
+app.listen(process.env.PORT, () => {
+    console.log(`App is running at localhost:${process.env.PORT}`);
 });
+
 
 
 
