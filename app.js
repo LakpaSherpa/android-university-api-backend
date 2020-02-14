@@ -14,25 +14,21 @@ mongoose.connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: tr
     });
 
 app.use(express.static(__dirname + "/public"));
-const UserRouter = require('./routes/users');
 app.options('*', cors());
 app.use(cors());
 app.use(morgan('tiny'));
 app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 
-app.use('/users', UserRouter);
-
-//app.use('/users', userRouter);
-// app.use('/upload', auth.verifyUser, uploadRouter);
-// app.use('/categories', auth.verifyUser, categoryRouter);
-// app.use('/tasks', auth.verifyUser, taskRouter);
+app.use('/users',require('./routes/users'));
+ //app.use('/upload', auth.verifyUser, uploadRouter);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
      res.status(500).send({ status: err.message });
     res.statusCode = 500;   
     res.json({ status: err.message });
-})
+}) 
 
 app.listen(process.env.PORT, () => {
     console.log(`App is running at localhost:${process.env.PORT}`);
