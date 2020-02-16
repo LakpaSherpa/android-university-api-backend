@@ -121,10 +121,10 @@ router.delete('/:userId', auth.verifyUser, auth.verifyAdmin, (req, res, next) =>
             res.json({ status: 'User deleted!', user: user });
         }).catch(next);
 });
-router.get('/all', auth.verifyUser, auth.verifyAdmin, (req, res, next) => {
-    User.find()
-        .then((users) => {
-            res.json(users);
-        }).catch(next);
-});
+// router.get('/all', auth.verifyUser, auth.verifyAdmin, (req, res, next) => {
+//     User.find()
+//         .then((users) => {
+//             res.json(users);
+//         }).catch(next);
+// });
 module.exports = router;

@@ -3,6 +3,6 @@ const User = require('../models/usersedit');
 const router = express.Router();
 
 
-router.post('updateinformation',(req,res,next)=>{
+router.post('/updateinformation',(req,res,next)=>{
 
 })
